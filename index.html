@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>7 עקרונות יפניים לנצח עצלנות</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@300;400;600;700&family=Noto+Serif+Hebrew:wght@400;700&display=swap');
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg-dark: #2c2c2c;
+    --bg-warm: #3a3632;
+    --sand: #d4c5a9;
+    --sand-light: #e8dcc8;
+    --brown: #8b7355;
+    --brown-light: #a89070;
+    --text-light: #f0ebe3;
+    --text-muted: #b8b0a2;
+    --accent-gold: #c9a96e;
+  }
+
+  html, body {
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Noto Sans Hebrew', sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-light);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Washi paper texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(212, 197, 169, 0.015) 2px,
+        rgba(212, 197, 169, 0.015) 4px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 3px,
+        rgba(212, 197, 169, 0.01) 3px,
+        rgba(212, 197, 169, 0.01) 6px
+      );
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Slides container */
+  .slides {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 80px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.7s ease, transform 0.7s ease;
+    transform: translateY(30px);
+    z-index: 0;
+  }
+
+  .slide.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    z-index: 2;
+  }
+
+  /* Decorative elements */
+  .slide::after {
+    content: '';
+    position: absolute;
+    top: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 1px;
+    background: var(--brown);
+    opacity: 0.4;
+  }
+
+  /* Slide number */
+  .slide-number {
+    position: absolute;
+    top: 50px;
+    left: 60px;
+    font-size: 0.75rem;
+    color: var(--brown);
+    letter-spacing: 0.15em;
+    font-weight: 300;
+  }
+
+  /* Title slide */
+  .slide--title {
+    background: linear-gradient(160deg, var(--bg-dark) 0%, var(--bg-warm) 100%);
+  }
+
+  .slide--title::after { display: none; }
+
+  .slide--title .title-kanji {
+    font-size: clamp(2rem, 5vw, 4rem);
+    color: var(--brown);
+    opacity: 0.2;
+    margin-bottom: 20px;
+    font-weight: 300;
+    letter-spacing: 0.3em;
+  }
+
+  .slide--title h1 {
+    font-family: 'Noto Serif Hebrew', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    color: var(--sand-light);
+    text-align: center;
+    line-height: 1.5;
+    margin-bottom: 24px;
+  }
+
+  .slide--title .subtitle {
+    font-size: clamp(0.9rem, 2vw, 1.15rem);
+    color: var(--brown-light);
+    font-weight: 300;
+    letter-spacing: 0.05em;
+  }
+
+  .slide--title .divider {
+    width: 80px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
+    margin: 30px 0;
+  }
+
+  /* Content slides */
+  .slide--content {
+    background: linear-gradient(160deg, var(--bg-dark) 0%, var(--bg-warm) 50%, var(--bg-dark) 100%);
+    text-align: center;
+    padding: 60px 10%;
+  }
+
+  .principle-number {
+    font-size: 0.8rem;
+    color: var(--brown);
+    letter-spacing: 0.2em;
+    margin-bottom: 12px;
+    font-weight: 300;
+  }
+
+  .principle-kanji {
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+    color: var(--brown);
+    opacity: 0.25;
+    margin-bottom: 8px;
+    font-weight: 300;
+  }
+
+  .slide--content h2 {
+    font-family: 'Noto Serif Hebrew', serif;
+    font-size: clamp(1.6rem, 4vw, 2.8rem);
+    font-weight: 700;
+    color: var(--sand-light);
+    margin-bottom: 8px;
+    line-height: 1.4;
+  }
+
+  .slide--content h3 {
+    font-size: clamp(1rem, 2vw, 1.3rem);
+    color: var(--accent-gold);
+    font-weight: 400;
+    margin-bottom: 32px;
+    letter-spacing: 0.03em;
+  }
+
+  .content-divider {
+    width: 40px;
+    height: 1px;
+    background: var(--brown);
+    margin: 0 auto 32px;
+    opacity: 0.5;
+  }
+
+  .slide--content p {
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    line-height: 2;
+    color: var(--text-muted);
+    max-width: 700px;
+    font-weight: 300;
+  }
+
+  .slide--content .highlight {
+    color: var(--sand-light);
+    font-weight: 400;
+  }
+
+  /* Closing slide */
+  .slide--closing {
+    background: linear-gradient(160deg, var(--bg-warm) 0%, var(--bg-dark) 100%);
+  }
+
+  .slide--closing::after { display: none; }
+
+  .slide--closing .closing-kanji {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    color: var(--brown);
+    opacity: 0.2;
+    margin-bottom: 20px;
+    letter-spacing: 0.4em;
+  }
+
+  .slide--closing h2 {
+    font-family: 'Noto Serif Hebrew', serif;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    color: var(--sand-light);
+    margin-bottom: 16px;
+    line-height: 1.5;
+  }
+
+  .slide--closing p {
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    color: var(--text-muted);
+    font-weight: 300;
+    max-width: 600px;
+    text-align: center;
+    line-height: 1.9;
+  }
+
+  .slide--closing .divider {
+    width: 80px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
+    margin: 28px 0;
+  }
+
+  /* Navigation dots */
+  .nav-dots {
+    position: fixed;
+    bottom: 36px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
+    z-index: 10;
+  }
+
+  .nav-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--brown);
+    opacity: 0.3;
+    cursor: pointer;
+    transition: opacity 0.3s, transform 0.3s, background 0.3s;
+    border: none;
+    padding: 0;
+  }
+
+  .nav-dot:hover {
+    opacity: 0.6;
+    transform: scale(1.3);
+  }
+
+  .nav-dot.active {
+    opacity: 1;
+    background: var(--accent-gold);
+    transform: scale(1.2);
+  }
+
+  /* Arrow hints */
+  .nav-arrows {
+    position: fixed;
+    bottom: 36px;
+    z-index: 10;
+    display: flex;
+    gap: 16px;
+  }
+
+  .nav-arrow {
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--brown);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--brown-light);
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+    opacity: 0.5;
+  }
+
+  .nav-arrow:hover {
+    opacity: 1;
+    border-color: var(--accent-gold);
+    color: var(--accent-gold);
+  }
+
+  .nav-arrows--right { right: 40px; }
+  .nav-arrows--left { left: 40px; }
+
+  /* Progress bar */
+  .progress-bar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent-gold), var(--brown));
+    transition: width 0.5s ease;
+    z-index: 10;
+  }
+
+  /* Mobile adjustments */
+  @media (max-width: 768px) {
+    .slide { padding: 40px 30px; }
+    .slide--content { padding: 40px 8%; }
+    .slide-number { top: 20px; left: 20px; }
+    .nav-arrows--right { right: 16px; }
+    .nav-arrows--left { left: 16px; }
+    .nav-arrow { width: 34px; height: 34px; font-size: 0.85rem; }
+    .nav-dots { bottom: 24px; }
+  }
+
+  /* Entrance animations for content */
+  .slide.active .principle-kanji,
+  .slide.active .title-kanji,
+  .slide.active .closing-kanji {
+    animation: fadeDown 0.8s ease both;
+  }
+
+  .slide.active h1,
+  .slide.active h2 {
+    animation: fadeUp 0.7s 0.15s ease both;
+  }
+
+  .slide.active h3,
+  .slide.active .subtitle {
+    animation: fadeUp 0.7s 0.3s ease both;
+  }
+
+  .slide.active p {
+    animation: fadeUp 0.7s 0.4s ease both;
+  }
+
+  .slide.active .divider,
+  .slide.active .content-divider {
+    animation: scaleIn 0.6s 0.25s ease both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-15px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes scaleIn {
+    from { opacity: 0; transform: scaleX(0); }
+    to { opacity: 1; transform: scaleX(1); }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress"></div>
+
+<div class="slides" id="slides">
+
+  <!-- Slide 1: Title -->
+  <div class="slide slide--title active" data-index="0">
+    <div class="title-kanji">七つの原則</div>
+    <h1>7 עקרונות יפניים<br>לנצח עצלנות</h1>
+    <div class="divider"></div>
+    <div class="subtitle">שיטות פשוטות מהתרבות היפנית שישנו את היום שלכם</div>
+  </div>
+
+  <!-- Slide 2: Kaizen -->
+  <div class="slide slide--content" data-index="1">
+    <div class="slide-number">01 / 07</div>
+    <div class="principle-kanji">改善</div>
+    <h2>קאיזן</h2>
+    <h3>חוק הדקה האחת</h3>
+    <div class="content-divider"></div>
+    <p>
+      להתחיל כל כך בקטן שהמוח לא יכול להתנגד.
+      <span class="highlight">שכיבת סמיכה אחת. משפט אחד. דקה אחת.</span>
+      מחקרים מראים שהרגלים זעירים עוקפים התנגדות מנטלית ונצברים לאורך זמן.
+      <span class="highlight">התקדמות מנצחת לחץ.</span>
+    </p>
+  </div>
+
+  <!-- Slide 3: Ikigai -->
+  <div class="slide slide--content" data-index="2">
+    <div class="slide-number">02 / 07</div>
+    <div class="principle-kanji">生き甲斐</div>
+    <h2>איקיגאי</h2>
+    <h3>סיבה לקום בבוקר</h3>
+    <div class="content-divider"></div>
+    <p>
+      היפנים לא שואלים ״מה אתה עושה?״, הם שואלים <span class="highlight">״למה אתה קם?״</span>.
+      מחקרים על תחושת ייעוד מראים שמשמעות מגבירה אנרגיה ומשמעת.
+      <span class="highlight">כשה״למה״ ברור, המאמץ מרגיש קל יותר.</span>
+    </p>
+  </div>
+
+  <!-- Slide 4: Hara Hachi Bu -->
+  <div class="slide slide--content" data-index="3">
+    <div class="slide-number">03 / 07</div>
+    <div class="principle-kanji">腹八分目</div>
+    <h2>הארה האצ׳י בו</h2>
+    <h3>לעצור ב-80 אחוז</h3>
+    <div class="content-divider"></div>
+    <p>
+      אכילת יתר הורגת פוקוס, מצב רוח ומוטיבציה.
+      זקני יפן נשארים פעילים כי הם עוצרים לפני שהם שבעים לגמרי.
+      מחקרים מקשרים עיכול קל לאנרגיה וצלילות מנטלית.
+      <span class="highlight">רוב ״העצלנות״ היא פשוט עומס פיזי.</span>
+    </p>
+  </div>
+
+  <!-- Slide 5: Seiri & Seiton -->
+  <div class="slide slide--content" data-index="4">
+    <div class="slide-number">04 / 07</div>
+    <div class="principle-kanji">整理・整頓</div>
+    <h2>סיירי וסייטון</h2>
+    <h3>מרחב נקי</h3>
+    <div class="content-divider"></div>
+    <p>
+      חדר מבולגן יוצר <span class="highlight">רעש מנטלי</span>.
+      התרבות היפנית מתייחסת לעומס ובלגן כמו לזיהום.
+      גם הפיד שלכם ברשתות יוצר רעש;
+      <span class="highlight">ודאו שאתם עוקבים אחרי יוצרים שבאמת עוזרים לכם לצמוח.</span>
+    </p>
+  </div>
+
+  <!-- Slide 6: Kintsugi -->
+  <div class="slide slide--content" data-index="5">
+    <div class="slide-number">05 / 07</div>
+    <div class="principle-kanji">金継ぎ</div>
+    <h2>קינצוגי</h2>
+    <h3>לסיים גם אם זה לא מושלם</h3>
+    <div class="content-divider"></div>
+    <p>
+      עצלנות מסתתרת מאחורי הפחד מכישלון.
+      הקינצוגי מלמד: <span class="highlight">פגמים אינם טעויות, הם חלק מההתקדמות.</span>
+      פסיכולוגיה מראה שהשלמת משימה בונה מומנטום, לא פרפקציוניזם.
+      <span class="highlight">סיימו עכשיו, תתקנו אחר כך.</span>
+    </p>
+  </div>
+
+  <!-- Slide 7: Pomodoro -->
+  <div class="slide slide--content" data-index="6">
+    <div class="slide-number">06 / 07</div>
+    <div class="principle-kanji">集中</div>
+    <h2>פומודורו יפני</h2>
+    <h3>25 דקות עבודה, 5 דקות טקס</h3>
+    <div class="content-divider"></div>
+    <p>
+      <span class="highlight">25 דקות עבודה, 5 דקות מנוחה.</span>
+      אבל הוסיפו טקס: נשימה, תנועה או צליל.
+      המוח לומד: האות הזה = ריכוז.
+      מדעי המוח קוראים לזה <span class="highlight">״התניה״</span>, וזה עובד מהר.
+    </p>
+  </div>
+
+  <!-- Slide 8: Wabi-Sabi -->
+  <div class="slide slide--content" data-index="7">
+    <div class="slide-number">07 / 07</div>
+    <div class="principle-kanji">侘寂</div>
+    <h2>ואבי-סאבי</h2>
+    <h3>לפעול לפני שזה מושלם</h3>
+    <div class="content-divider"></div>
+    <p>
+      היפנים לא מחכים לתנאים אידיאליים.
+      <span class="highlight">הם פועלים עם מה שיש להם.</span>
+      פרפקציוניזם מעכב פעולה. תנועה מייצרת בהירות.
+      <span class="highlight">רוב הדחיינות היא רק פחד שמתחפש לסבלנות.</span>
+    </p>
+  </div>
+
+  <!-- Slide 9: Closing -->
+  <div class="slide slide--closing" data-index="8">
+    <div class="closing-kanji">始</div>
+    <h2>התחילו בקטן.<br>התחילו עכשיו.</h2>
+    <div class="divider"></div>
+    <p>לא צריך לשנות הכל.<br>מספיק לשנות את הדקה הבאה.</p>
+  </div>
+
+</div>
+
+<!-- Navigation dots -->
+<div class="nav-dots" id="navDots"></div>
+
+<!-- Arrow buttons -->
+<div class="nav-arrows nav-arrows--left">
+  <button class="nav-arrow" id="btnNext" aria-label="הבא">&#8592;</button>
+</div>
+<div class="nav-arrows nav-arrows--right">
+  <button class="nav-arrow" id="btnPrev" aria-label="הקודם">&#8594;</button>
+</div>
+
+<script>
+(function() {
+  const slides = document.querySelectorAll('.slide');
+  const totalSlides = slides.length;
+  let current = 0;
+  let isAnimating = false;
+
+  const progress = document.getElementById('progress');
+  const dotsContainer = document.getElementById('navDots');
+  const btnPrev = document.getElementById('btnPrev');
+  const btnNext = document.getElementById('btnNext');
+
+  // Build dots
+  for (let i = 0; i < totalSlides; i++) {
+    const dot = document.createElement('button');
+    dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', 'שקף ' + (i + 1));
+    dot.addEventListener('click', function() { goTo(i); });
+    dotsContainer.appendChild(dot);
+  }
+  const dots = dotsContainer.querySelectorAll('.nav-dot');
+
+  function updateProgress() {
+    const pct = ((current) / (totalSlides - 1)) * 100;
+    progress.style.width = pct + '%';
+  }
+
+  function goTo(index) {
+    if (isAnimating || index === current || index < 0 || index >= totalSlides) return;
+    isAnimating = true;
+
+    slides[current].classList.remove('active');
+    dots[current].classList.remove('active');
+
+    current = index;
+
+    slides[current].classList.add('active');
+    dots[current].classList.add('active');
+    updateProgress();
+
+    setTimeout(function() { isAnimating = false; }, 700);
+  }
+
+  function next() { goTo(current + 1); }
+  function prev() { goTo(current - 1); }
+
+  // Keyboard
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowDown' || e.key === ' ') {
+      e.preventDefault();
+      // In RTL, left arrow = next
+      next();
+    } else if (e.key === 'ArrowRight' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      prev();
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      goTo(0);
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      goTo(totalSlides - 1);
+    }
+  });
+
+  // Arrow buttons (RTL: right arrow goes back, left arrow goes forward)
+  btnPrev.addEventListener('click', prev);
+  btnNext.addEventListener('click', next);
+
+  // Touch / swipe
+  let touchStartX = 0;
+  let touchStartY = 0;
+
+  document.addEventListener('touchstart', function(e) {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+
+  document.addEventListener('touchend', function(e) {
+    const dx = e.changedTouches[0].screenX - touchStartX;
+    const dy = e.changedTouches[0].screenY - touchStartY;
+    if (Math.abs(dx) < 50 || Math.abs(dy) > Math.abs(dx)) return;
+    // RTL: swipe right = prev, swipe left = next
+    if (dx > 0) prev();
+    else next();
+  }, { passive: true });
+
+  // Click on slide area (not on buttons/dots) to advance
+  document.getElementById('slides').addEventListener('click', function(e) {
+    if (e.target.closest('.nav-dot, .nav-arrow, a, button')) return;
+    next();
+  });
+
+  // Mouse wheel
+  let wheelTimeout = false;
+  document.addEventListener('wheel', function(e) {
+    if (wheelTimeout) return;
+    wheelTimeout = true;
+    if (e.deltaY > 0) next();
+    else if (e.deltaY < 0) prev();
+    setTimeout(function() { wheelTimeout = false; }, 800);
+  }, { passive: true });
+
+  updateProgress();
+})();
+</script>
+
+</body>
+</html>
